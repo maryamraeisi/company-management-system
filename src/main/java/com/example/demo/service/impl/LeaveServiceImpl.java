@@ -2,21 +2,24 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.LeaveDTO;
 import com.example.demo.enums.LeaveRequestCheck;
+import com.example.demo.model.Employee;
 import com.example.demo.model.Leave;
 import com.example.demo.repository.api.LeaveRepository;
 import com.example.demo.service.api.LeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Timer;
 
 @Service
 @RequiredArgsConstructor
 public class LeaveServiceImpl implements LeaveService {
 
+    private final SetEmployeeStatusOnLeave setEmployeeStatusOnLeave;
+    private final SetEmployeeStatusAtWork setEmployeeStatusAtWork;
     private final LeaveRepository leaveRepository;
     private final int leaveRequestLimit = 10;
 
@@ -26,19 +29,18 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public void saveLeave(LeaveDTO leaveDTO) {
-        Leave leave = fillLeave(leaveDTO);
+    public void saveLeave(Leave leave) {
         leaveRepository.saveLeave(leave);
     }
 
-    private Leave fillLeave(LeaveDTO leaveDTO) {
+    @Override
+    public Leave fillLeave(LeaveDTO leaveDTO) {
         Leave leave = new Leave();
         LocalDateTime startDateTime = LocalDateTime.parse(leaveDTO.getStartDateTime());
         LocalDateTime endDateTime = LocalDateTime.parse(leaveDTO.getEndDateTime());
         leave.setStartDateTime(Timestamp.valueOf(startDateTime));
         leave.setEndDateTime(Timestamp.valueOf(endDateTime));
         leave.setLeaveType(leaveDTO.getLeaveType());
-        leave.setEmployee(leaveDTO.getEmployee());
         leave.setEnabled(true);
         return leave;
     }
@@ -85,5 +87,18 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public void updateLeaveStatus(long leaveId, boolean isAccepted) {
         leaveRepository.updateLeaveStatus(leaveId, isAccepted);
+        if (isAccepted) {
+            Leave leave = loadLeaveById(leaveId);
+            Employee employee = leave.getEmployee();
+            Timer timer = new Timer();
+            setEmployeeStatusOnLeave.setEmployee(employee);
+            setEmployeeStatusAtWork.setEmployee(employee);
+            timer.schedule(setEmployeeStatusOnLeave, leave.getStartDateTime());
+            timer.schedule(setEmployeeStatusAtWork, leave.getEndDateTime());
+        }
+    }
+
+    private Leave loadLeaveById(long leaveId) {
+        return leaveRepository.loadLeaveById(leaveId);
     }
 }

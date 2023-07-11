@@ -1,7 +1,6 @@
 package com.example.demo.repository.api;
 
 import com.example.demo.model.Leave;
-
 import java.util.List;
 
 public interface LeaveRepository {
@@ -17,4 +16,6 @@ public interface LeaveRepository {
     List<Leave> loadEmployeeLeaveRequestsForManager(String managerUsername);
 
     void updateLeaveStatus(long leaveId, boolean isAccepted);
+
+    Leave loadLeaveById(long leaveId);
 }

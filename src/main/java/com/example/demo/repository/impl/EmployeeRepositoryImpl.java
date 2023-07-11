@@ -1,15 +1,14 @@
 package com.example.demo.repository.impl;
 
+import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.api.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.NoResultException;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public Employee findEmployeeByUsername(String username) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e from Employee e where e.username = :username";
+            String hqlString = "select e from Employee e where e.username = :username and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("username", username);
             Employee employee = (Employee) query.getSingleResult();
@@ -52,7 +51,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public Employee findEmployeeByEmail(String email) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e from Employee e where e.email = :email";
+            String hqlString = "select e from Employee e where e.email = :email and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("email", email);
             Employee employee = (Employee) query.getSingleResult();
@@ -68,7 +67,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public List<Employee> findManagers() {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e from Employee e join e.roles r where r.name = 'ROLE_MANAGER'";
+            String hqlString = "select e from Employee e join e.roles r where r.name = 'ROLE_MANAGER' and e.enabled = true";
             Query query = session.createQuery(hqlString);
             List<Employee> employeeList = (List<Employee>) query.getResultList();
             return employeeList;
@@ -81,7 +80,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public Employee findEmployeeById(long id) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e from Employee e where e.id = :id";
+            String hqlString = "select e from Employee e where e.id = :id and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("id", id);
             Employee employee = (Employee) query.getSingleResult();
@@ -97,7 +96,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public String loadEmployeeEmailByUsername(String username) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e.email from Employee e where e.username = :username";
+            String hqlString = "select e.email from Employee e where e.username = :username and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("username", username);
             String email = (String) query.getSingleResult();
@@ -113,13 +112,26 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public Long loadEmployeeIdByUsername(String username) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e.id from Employee e where e.username = :username";
+            String hqlString = "select e.id from Employee e where e.username = :username and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("username", username);
             Long id = (Long) query.getSingleResult();
             return id;
         } catch (NoResultException e) {
             return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateEmployeeStatus(Employee employee, EmployeeStatus employeeStatus) {
+        Session session = sessionFactory.openSession();
+        try {
+            Transaction transaction = session.beginTransaction();
+            employee.setStatus(employeeStatus);
+            session.update(employee);
+            transaction.commit();
         } finally {
             session.close();
         }

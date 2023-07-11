@@ -35,7 +35,7 @@ public class EmailRepositoryImpl implements EmailRepository {
     public List<Email> loadEmployeeSentEmails(Long employeeId) {
         Session session = sessionFactory.openSession();
         try {
-            String hqlString = "select e from Email e where e.employee.id = :employeeId";
+            String hqlString = "select e from Email e where e.employee.id = :employeeId and e.enabled = true";
             Query query = session.createQuery(hqlString);
             query.setParameter("employeeId", employeeId);
             List<Email> emails = query.getResultList();

@@ -1,5 +1,6 @@
 package com.example.demo.repository.api;
 
+import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface EmployeeRepository {
     String loadEmployeeEmailByUsername(String username);
 
     Long loadEmployeeIdByUsername(String username);
+
+    void updateEmployeeStatus(Employee employee, EmployeeStatus employeeStatus);
 }

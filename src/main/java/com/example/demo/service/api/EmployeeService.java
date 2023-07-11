@@ -1,8 +1,8 @@
 package com.example.demo.service.api;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
-import com.example.demo.model.Leave;
 
 import java.util.List;
 
@@ -23,4 +23,6 @@ public interface EmployeeService {
     String loadEmployeeEmailByUsername(String username);
 
     Long loadEmployeeIdByUsername(String username);
+
+    void updateEmployeeStatus(Employee employee, EmployeeStatus employeeStatus);
 }

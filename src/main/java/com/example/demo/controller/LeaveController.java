@@ -52,8 +52,9 @@ public class LeaveController {
                 setModelAttributes(model, leaveDTO, username, leaves, LeaveErrors.EXCEEDING_LIMIT);
                 return TemplateNames.EMPLOYEE_LEAVES;
             }
-            leaveDTO.setEmployee(employee);
-            leaveService.saveLeave(leaveDTO);
+            Leave leave = leaveService.fillLeave(leaveDTO);
+            leave.setEmployee(employee);
+            leaveService.saveLeave(leave);
             List<Leave> updatedLeaves = leaveService.loadEmployeeLeavesByEmployeeUsername(username);
             setModelAttributes(model, new LeaveDTO(), username, updatedLeaves, null);
         } catch (Exception e) {

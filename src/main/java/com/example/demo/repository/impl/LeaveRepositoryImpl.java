@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -97,6 +96,20 @@ public class LeaveRepositoryImpl implements LeaveRepository {
             leave.setIsAccepted(isAccepted);
             session.update(leave);
             transaction.commit();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public Leave loadLeaveById(long leaveId) {
+        Session session = sessionFactory.openSession();
+        try {
+            String hqlString = "select l from Leave l where l.id = :leaveId and l.enabled = true";
+            Query query = session.createQuery(hqlString);
+            query.setParameter("leaveId", leaveId);
+            Leave leave = (Leave) query.getSingleResult();
+            return leave;
         } finally {
             session.close();
         }

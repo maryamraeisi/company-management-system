@@ -1,8 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
-import com.example.demo.model.Leave;
 import com.example.demo.model.Role;
 import com.example.demo.repository.api.EmployeeRepository;
 import com.example.demo.service.api.EmployeeService;
@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -94,5 +93,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Long loadEmployeeIdByUsername(String username) {
         return employeeRepository.loadEmployeeIdByUsername(username);
+    }
+
+    @Override
+    public void updateEmployeeStatus(Employee employee, EmployeeStatus employeeStatus) {
+        employeeRepository.updateEmployeeStatus(employee, employeeStatus);
     }
 }

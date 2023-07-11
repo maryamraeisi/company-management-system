@@ -4,15 +4,15 @@ import com.example.demo.dto.LeaveDTO;
 import com.example.demo.enums.LeaveRequestCheck;
 import com.example.demo.model.Leave;
 import org.springframework.ui.Model;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface LeaveService {
 
     List<Leave> loadEmployeeLeavesByEmployeeUsername(String username);
 
-    void saveLeave(LeaveDTO leaveDTO);
+    void saveLeave(Leave leave);
+
+    Leave fillLeave(LeaveDTO leaveDTO);
 
     LeaveRequestCheck checkValidity(LeaveDTO leaveDTO, String username, Model model);
 
