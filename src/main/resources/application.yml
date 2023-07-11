@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://localhost/company_management_system_database
+    password: Maryam123456789
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+  mvc:
+    servlet:
+      path: /api/v1/company_management_system
+    view:
+      suffix: .html
+      prefix: src/main/resources

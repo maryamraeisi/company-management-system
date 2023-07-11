@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Employee Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/shards.min.css">
+</head>
+<body>
+<div class="container my-5">
+    <h2 class="mb-5">New Employee</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#" th:action="@{/api/v1/company_management_system/signup}" th:object="${employeeDTO}" method="post">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="username" class="col-form-label">Username</label>
+                        <input type="text" th:field="*{username}" class="form-control" id="username" placeholder="Username">
+                        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="password" class="col-form-label">Password</label>
+                        <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="password">
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="first name" class="col-form-label">First Name</label>
+                        <input type="text" th:field="*{firstName}" class="form-control" id="first name" placeholder="First Name">
+                        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="last name" class="col-form-label">Last Name</label>
+                        <input type="text" th:field="*{lastName}" class="form-control" id="last name" placeholder="Last Name">
+                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email" class="col-form-label">Email</label>
+                        <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Email">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="role" class="col-form-label">Select Your Role</label>
+                        <select id="role" th:field="*{roleId}" class="form-control">
+                            <option th:each="role : ${employeeRoles}" th:value="${role.id}" th:text="${role.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="manager" class="col-form-label">Select Your Manager</label>
+                        <select id="manager" th:field="*{managerId}" class="form-control">
+                            <option th:each="manager : ${managers}" th:value="${manager.id}" th:text="${manager.getFirstName() + ' ' + manager.getLastName()}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-5">
+                        <input type="submit" class="btn btn-primary" value="Sign up">
+                    </div>
+                    <span th:if="${message != null}" th:text="${message}" class="text-danger"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

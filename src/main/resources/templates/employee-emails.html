@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Send Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/shards.min.css">
+</head>
+<body>
+<span th:if="${errorMessage ne null}" th:text="${errorMessage}" class="text-danger"></span>
+<div id="sendEmailDiv" align="center" th:if="${errorMessage eq null}">
+    <h3 style="margin-top: 20px; margin-left: 10px" align="left">Send Email</h3>
+    <form action="#" th:action="@{'/api/v1/company_management_system/send_email/' + ${username}}" th:object="${emailDTO}" enctype="multipart/form-data" method="post" >
+        <table style="width: 90%">
+            <tr>
+                <td style="width: 350px">
+                    <label for="from" class="col-form-label">From: </label>
+                    <input type="email" th:field="*{from}" readonly="readonly" class="form-control" id="from" th:placeholder="${from}">
+                </td>
+                <td style="width: 350px">
+                    <label for="to" class="col-form-label">To: </label>
+                    <input type="email" th:field="*{to}" class="form-control" id="to" placeholder="To">
+                    <span th:if="${#fields.hasErrors('to')}" th:errors="*{to}" class="text-danger"></span>
+                </td>
+                <td style="width: 350px">
+                    <label for="subject" class="col-form-label">Subject: </label>
+                    <input type="text" th:field="*{subject}" class="form-control" id="subject" placeholder="subject">
+                    <span th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 700px">
+                    <label for="body" class="col-form-label">Body: </label>
+                    <textarea th:field="*{body}" class="form-control" id="body" rows="6" cols="80"/>
+                    <span th:if="${#fields.hasErrors('body')}" th:errors="*{body}" class="text-danger"></span>
+                </td>
+                <td style="width: 350px">
+                    <label for="uploadFile" class="col-form-label">Upload File: </label>
+                    <input type="file" id="uploadFile" name="attachedFile" class="form-control-file" placeholder="uploadFile" size="50">
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 50px">
+                    <input type="submit" class="btn btn-primary" value="Send">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<p class="my-5" style="margin-left: 15px">Back To Profile<a th:href="@{'/api/v1/company_management_system/employee_profile/' + ${username}}" class="btn btn-primary"><i class="fas fa-arrow-left ml-2"></i></a></p>
+<hr style="border: none; border-bottom: 1px solid black; width: 90%; align-self: start">
+<div id="InboxesDiv" align="center" th:if="${errorMessage eq null}">
+    <h4 style="margin-top: 20px; margin-left: 10px" align="left">Inbox</h4>
+    <table class="table table-striped table-responsive-md" style="width: 90%">
+        <colgroup>
+            <col style="width: 5%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 25%">
+            <col style="width: 40%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th style="border-right: 1px solid gray; text-align: center"></th>
+            <th style="border-right: 1px solid gray; text-align: center">From</th>
+            <th style="border-right: 1px solid gray; text-align: center">To</th>
+            <th style="border-right: 1px solid gray; text-align: center">Subject</th>
+            <th style="border-right: 1px solid gray; text-align: center">Body</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="height: min-content" th:each="email, emailIndex : ${emails}">
+            <td style="border-right: 1px solid gray; text-align: center" th:text="${emailIndex.index + 1}"></td>
+            <td style="border-right: 1px solid gray; text-align: center" th:text="${email.getFrom()}"></td>
+            <td style="border-right: 1px solid gray; text-align: center" th:text="${email.getTo()}"></td>
+            <td style="border-right: 1px solid gray; text-align: center" th:text="${email.getSubject()}"></td>
+            <td style="border-right: 1px solid gray; text-align: center; max-width: 40%; text-trim: inherit" th:text="${email.getBody()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
