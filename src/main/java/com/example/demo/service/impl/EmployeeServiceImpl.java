@@ -1,10 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.EmployeeDTO;
-import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Role;
-import com.example.demo.repository.api.EmployeeRepository;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.api.EmployeeService;
 import com.example.demo.service.api.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void saveEmployee(Employee employee) {
-        employeeRepository.saveEmployee(employee);
+        employeeRepository.save(employee);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         Employee employee = modelMapper.map(employeeDTO, Employee.class);
         Role role = roleService.findRoleById(employeeDTO.getRoleId());
-        Employee manager = employeeRepository.findEmployeeById(employeeDTO.getManagerId());
+        Employee manager = employeeRepository.findById(employeeDTO.getManagerId()).get();
         String password = passwordEncoder.encode(employeeDTO.getPassword());
         List<Role> roles = new LinkedList<>(Arrays.asList(role));
         if (role.getName().equals("ROLE_MANAGER")) {
@@ -49,12 +48,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findEmployeeByUsername(String username) throws UsernameNotFoundException {
-        return employeeRepository.findEmployeeByUsername(username);
+        return employeeRepository.findByUsername(username);
     }
 
     @Override
     public Employee findEmployeeByEmail(String email) {
-        Employee employee = employeeRepository.findEmployeeByEmail(email);
+        Employee employee = employeeRepository.findByEmail(email);
         return employee;
     }
 
@@ -85,18 +84,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDTO;
     }
 
-    @Override
-    public String loadEmployeeEmailByUsername(String username) {
-        return employeeRepository.loadEmployeeEmailByUsername(username);
-    }
-
-    @Override
-    public Long loadEmployeeIdByUsername(String username) {
-        return employeeRepository.loadEmployeeIdByUsername(username);
-    }
-
-    @Override
-    public void updateEmployeeStatus(Employee employee, EmployeeStatus employeeStatus) {
-        employeeRepository.updateEmployeeStatus(employee, employeeStatus);
-    }
 }

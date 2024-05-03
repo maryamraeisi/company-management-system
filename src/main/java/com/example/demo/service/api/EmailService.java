@@ -18,6 +18,8 @@ public interface EmailService {
 
     void sendEmail(EmailDTO emailDTO, MultipartFile attachedFile);
 
+    String loadEmployeeEmailsByUsername(String username);
+
     List<EmailDTO> loadEmployeeInbox(String email) throws MessagingException, IOException;
 
     void receiveEmail();

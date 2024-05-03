@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.enums.EmployeeStatus;
 import lombok.*;
 import javax.persistence.*;
 import java.util.*;
@@ -19,8 +18,6 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String email;
-    @Enumerated(EnumType.STRING)
-    private EmployeeStatus status;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             name = "user_roles",

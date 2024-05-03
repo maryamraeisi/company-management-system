@@ -69,16 +69,6 @@ public class SecurityConfig {
 //        return new InMemoryUserDetailsManager(maryam, niloofar);
 //    }
 
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUsername("root");
-        dataSource.setPassword("Maryam123456789");
-        dataSource.setUrl("jdbc:mysql://localhost/company_management_system");
-        return dataSource;
-    }
-
 //    @Bean
 //    @Qualifier("userDetailsManager")
 //    public UserDetailsManager userDetailsManager(DataSource dataSource) {

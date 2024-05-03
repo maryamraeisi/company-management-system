@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.enums.EmployeeStatus;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Role;
 import com.example.demo.service.api.EmployeeService;
@@ -59,7 +58,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             employee.setEmail(email);
             employee.setRoles(roles);
             employee.setEnabled(true);
-            employee.setStatus(EmployeeStatus.AT_WORK);
             employeeService.saveEmployee(employee);
             logger.info(String.format("employee \"%s\" created.", username));
         }

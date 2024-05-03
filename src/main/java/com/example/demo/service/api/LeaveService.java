@@ -18,7 +18,7 @@ public interface LeaveService {
 
     List<Leave> loadNonRejectedEmployeeLeavesByEmployeeUsername(String username);
 
-    Leave deleteLeaveById(long leaveId);
+    void deleteLeaveById(long leaveId);
 
     List<Leave> loadEmployeeLeaveRequestsForManager(String managerUsername);
 

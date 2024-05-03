@@ -74,7 +74,7 @@ public class LeaveController {
 
     @GetMapping(LeaveURLs.DELETE_LEAVE_RELATIVE_URL + "{username}/{leaveId}")
     public String getDeleteLeaveRequest(@PathVariable String username, @PathVariable long leaveId, Model model) {
-        Leave deletedLeave = leaveService.deleteLeaveById(leaveId);
+        leaveService.deleteLeaveById(leaveId);
         List<Leave> leaves = leaveService.loadEmployeeLeavesByEmployeeUsername(username);
         setModelAttributes(model, new LeaveDTO(), username, leaves, null);
         return "redirect:" + LeaveURLs.EMPLOYEE_LEAVES_FULL_URL + username;

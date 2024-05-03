@@ -5,7 +5,7 @@ import com.example.demo.config.SMTPServerConfig;
 import com.example.demo.dto.EmailDTO;
 import com.example.demo.model.Email;
 import com.example.demo.model.Employee;
-import com.example.demo.repository.api.EmailRepository;
+import com.example.demo.repository.EmailRepository;
 import com.example.demo.service.api.EmailService;
 import com.example.demo.service.api.EmployeeService;
 import org.modelmapper.ModelMapper;
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void saveEmail(Email email) {
-        emailRepository.saveEmail(email);
+        emailRepository.save(email);
     }
 
     @Override
@@ -87,6 +87,11 @@ public class EmailServiceImpl implements EmailService {
             LOGGER.error("failed to send email", e);
             throw new IllegalStateException("failed to send email");
         }
+    }
+
+    @Override
+    public String loadEmployeeEmailsByUsername(String username) {
+        return emailRepository.loadEmployeeEmailByUsername(username);
     }
 
     @Override

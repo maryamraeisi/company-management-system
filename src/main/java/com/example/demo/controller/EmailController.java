@@ -34,8 +34,7 @@ public class EmailController {
     public String getSendEmail(@PathVariable String username, Model model) {
         EmailDTO emailDTO = new EmailDTO();
         try {
-            String employeeEmail = employeeService.loadEmployeeEmailByUsername(username);
-            Long employeeId = employeeService.loadEmployeeIdByUsername(username);
+            String employeeEmail = emailService.loadEmployeeEmailsByUsername(username);
 //        List<EmailDTO> emailDTOList = emailService.loadEmployeeSentEmails(employeeId);
             List<EmailDTO> emailDTOList = emailService.loadEmployeeInbox(employeeEmail);
             emailDTO.setFrom(employeeEmail);

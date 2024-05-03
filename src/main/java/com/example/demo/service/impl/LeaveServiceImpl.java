@@ -2,9 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.LeaveDTO;
 import com.example.demo.enums.LeaveRequestCheck;
-import com.example.demo.model.Employee;
 import com.example.demo.model.Leave;
-import com.example.demo.repository.api.LeaveRepository;
+import com.example.demo.repository.LeaveRepository;
 import com.example.demo.service.api.LeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,14 +11,10 @@ import org.springframework.ui.Model;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Timer;
 
 @Service
 @RequiredArgsConstructor
 public class LeaveServiceImpl implements LeaveService {
-
-    private final SetEmployeeStatusOnLeave setEmployeeStatusOnLeave;
-    private final SetEmployeeStatusAtWork setEmployeeStatusAtWork;
     private final LeaveRepository leaveRepository;
     private final int leaveRequestLimit = 10;
 
@@ -30,7 +25,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public void saveLeave(Leave leave) {
-        leaveRepository.saveLeave(leave);
+        leaveRepository.save(leave);
     }
 
     @Override
@@ -75,8 +70,8 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public Leave deleteLeaveById(long leaveId) {
-        return leaveRepository.deleteLeaveById(leaveId);
+    public void deleteLeaveById(long leaveId) {
+        leaveRepository.deleteById(leaveId);
     }
 
     @Override
@@ -87,18 +82,6 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public void updateLeaveStatus(long leaveId, boolean isAccepted) {
         leaveRepository.updateLeaveStatus(leaveId, isAccepted);
-        if (isAccepted) {
-            Leave leave = loadLeaveById(leaveId);
-            Employee employee = leave.getEmployee();
-            Timer timer = new Timer();
-            setEmployeeStatusOnLeave.setEmployee(employee);
-            setEmployeeStatusAtWork.setEmployee(employee);
-            timer.schedule(setEmployeeStatusOnLeave, leave.getStartDateTime());
-            timer.schedule(setEmployeeStatusAtWork, leave.getEndDateTime());
-        }
     }
 
-    private Leave loadLeaveById(long leaveId) {
-        return leaveRepository.loadLeaveById(leaveId);
-    }
 }
